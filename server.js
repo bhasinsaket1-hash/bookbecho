@@ -17,6 +17,14 @@ const {
 
 const auth = () =>
   'Basic ' + Buffer.from(`${KEY}:${SECRET}`).toString('base64');
+// Server-side trusted prices for Razorpay orders
+const BOOK_PRICES = {
+  1: 225,
+  2: 300,
+  3: 160,
+  4: 250,
+  5: 900
+};
 
 // Create a Razorpay order
 app.post('/api/order', async (req, res) => {
@@ -26,13 +34,16 @@ app.post('/api/order', async (req, res) => {
     });
   }
 
-  const amount = Math.round(Number(req.body.amount) * 100);
+  const bookId = Number(req.body.bookId);
+const price = BOOK_PRICES[bookId];
 
-  if (!Number.isFinite(amount) || amount < 100) {
-    return res.status(400).json({
-      error: 'Invalid amount'
-    });
-  }
+if (!Number.isFinite(bookId) || price === undefined) {
+  return res.status(400).json({
+    error: 'Invalid book'
+  });
+}
+
+const amount = Math.round(price * 100);
 
   try {
     const r = await fetch('https://api.razorpay.com/v1/orders', {

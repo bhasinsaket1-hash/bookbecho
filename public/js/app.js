@@ -71,7 +71,7 @@ dealBody.innerHTML=`<h3>${esc(x.t)}</h3><div class="hint">Pay <b>₹${p}</b> to 
 try{new QRCode($('qr'),{text:link,width:170,height:170})}catch(e){$('qr').textContent='QR unavailable offline'}}
 function markSold(id){const x=S.books.find(b=>b.id==id);x.sold=true;save();dDeal.close();render()}
 async function payRzp(id){const x=S.books.find(b=>b.id==id);
-try{const o=await (await fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:price(x.mrp),title:x.t})})).json();
+try{const o=await (await fetch('/api/order',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({bookId:x.id,title:x.t})})).json();
 if(o.error)throw new Error(o.error);
 await new Promise((ok,no)=>{if(window.Razorpay)return ok();const s=document.createElement('script');s.src='https://checkout.razorpay.com/v1/checkout.js';s.onload=ok;s.onerror=no;document.head.appendChild(s)});
 new Razorpay({key:o.key,amount:o.amount,currency:'INR',order_id:o.id,name:'BookBecho',description:x.t,prefill:{name:S.user.name,contact:S.user.phone},
