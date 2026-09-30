@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BookBecho – Buy, Sell &amp; Exchange Books</title>
+<link rel="stylesheet" href="css/style.css"></head><body>
+<header>
+<div class="logo">📚 BookBecho</div>
+<nav>
+<button class="tabb on" data-t="buy" onclick="setTab('buy')">Buy</button>
+<button class="tabb" data-t="ex" onclick="setTab('ex')">🔄 Exchange</button>
+<button class="tabb" data-t="mine" onclick="setTab('mine')">My Books</button>
+</nav>
+<span id="who" class="tag"></span>
+<button class="btn alt sm" id="loginBtn" onclick="openLogin()">Login</button>
+<button class="btn" onclick="openSell()">+ Sell</button>
+</header>
+
+<section class="hero">
+<h1>Great books. Half the price.</h1>
+<p>Buy, sell or swap second-hand books with readers in your own city.</p>
+<div class="sbox"><input id="q" placeholder="Search title, author, subject…" oninput="render()"><select id="city" onchange="render()"></select></div>
+<div class="stats"><div><b id="stB">0</b>books listed</div><div><b id="stX">0</b>exchange requests</div><div><b>50%</b>always off MRP</div></div>
+</section>
+<div class="steps">
+<div class="step"><b>1 · List</b>Upload your book, we set 50% of MRP.</div>
+<div class="step"><b>2 · Meet</b>Same-city buyers &amp; sellers connect.</div>
+<div class="step"><b>3 · Pay by UPI</b>Direct to seller, no middleman.</div>
+<div class="step"><b>4 · Or swap</b>Post a want, exchange book-for-book.</div>
+</div>
+
+<main>
+<div id="buyView">
+<h2>Browse by category</h2>
+<div class="cats" id="cats"></div>
+<div class="row"><h2 id="listTitle">Latest books</h2><select id="sort" onchange="render()" class="btn alt sm"><option value="new">Newest</option><option value="lo">Price: low → high</option><option value="hi">Price: high → low</option></select></div>
+<div class="grid" id="list"></div>
+</div>
+
+<div id="exView" hidden>
+<div class="row"><h2>🔄 Book Exchange</h2><button class="btn p" onclick="openWant()">+ I need a book</button></div>
+<p class="tag">Post the book you need and what you can give in return. If someone in your city has it and likes your offer, they accept and you swap books in person.</p>
+<div class="grid" id="reqs"></div>
+<h2>Books open for exchange</h2>
+<div class="grid" id="exBooks"></div>
+</div>
+</main>
+<footer>BookBecho · Second-hand books, first-class savings · Demo build (data stays in your browser)</footer>
+
+<dialog id="dLogin" class="dlg"><div class="f"><h3>Login / Sign up</h3>
+<div><label>Your name</label><input id="lName"></div>
+<div><label>Phone (shared only when a deal starts)</label><input id="lPhone" inputmode="numeric" maxlength="10"></div>
+<div><label>Your city</label><input id="lCity" list="cities"></div><datalist id="cities"></datalist>
+<button class="btn" onclick="login()">Continue</button><button class="btn alt" onclick="dLogin.close()">Cancel</button></div></dialog>
+
+<dialog id="dSell" class="dlg"><div class="f"><h3>Sell your book</h3>
+<div><label>Title</label><input id="sTitle"></div>
+<div><label>Author</label><input id="sAuth"></div>
+<div><label>Category</label><select id="sCat"></select></div>
+<div><label>Original MRP (₹)</label><input id="sMrp" type="number" min="1" oninput="calc()"></div>
+<div class="hint" id="sPrice">Selling price will be 50% of MRP</div>
+<div><label>Condition</label><select id="sCond"><option>Like new</option><option>Good</option><option>Fair</option></select></div>
+<div><label>Your UPI ID</label><input id="sUpi" placeholder="name@upi"></div>
+<div><label>Pickup locality in your city</label><input id="sLoc" placeholder="e.g. Shastri Nagar"></div>
+<label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="sEx" style="width:auto"> Also open to exchange for another book</label>
+<div><label>Photo (optional, under 600 KB)</label><input id="sImg" type="file" accept="image/*"></div>
+<button class="btn" onclick="sell()">Upload Book</button><button class="btn alt" onclick="dSell.close()">Cancel</button></div></dialog>
+
+<dialog id="dWant" class="dlg"><div class="f"><h3>Request a book to exchange</h3>
+<div><label>Book you need</label><input id="wTitle"></div>
+<div><label>Category</label><select id="wCat"></select></div>
+<div><label>Book you can give in return</label><input id="wGive"></div>
+<div><label>Note (edition, condition…)</label><textarea id="wNote" rows="2"></textarea></div>
+<div><label>Meet-up locality</label><input id="wLoc"></div>
+<button class="btn p" onclick="want()">Post request</button><button class="btn alt" onclick="dWant.close()">Cancel</button></div></dialog>
+
+<dialog id="dDeal" class="dlg"><div class="f" id="dealBody"></div></dialog>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="js/app.js"></script>
+</body></html>
